@@ -41,32 +41,37 @@ function Unix_timestamp_date(t) {
 app.post('/createMessage', (req, res) => {
   const message = req.body;
   console.log(message);
-
-  const hora = Unix_timestamp(message.timestamp);
-  const fecha = Unix_timestamp_date(message.timestamp);
-  console.log(hora, "hora");
-  console.log(fecha, "date");
-
-  if(message.data === "45778A"){
-    return axios({
-      url: 'https://back-temperature-sento.herokuapp.com/graphql',
-      method: 'post',
-      data: {
-        query: `
-            mutation{
-                addMessage(
-                    sigfox:"${message.sigfox}",
-                    timestamp:"${fecha}",
-                    data:"${message.data}"
-                ){
-                    id
-                }
-            }
-        `,
-      },
-    });
+  if(message.sigfox){
+    const hora = Unix_timestamp(message.timestamp);
+    const fecha = Unix_timestamp_date(message.timestamp);
+    console.log(hora, "hora");
+    console.log(fecha, "date");
+  
+    if(message.data === "45778A"){
+      return axios({
+        url: 'https://back-temperature-sento.herokuapp.com/graphql',
+        method: 'post',
+        data: {
+          query: `
+              mutation{
+                  addMessage(
+                      sigfox:"${message.sigfox}",
+                      timestamp:"${fecha}",
+                      data:"${message.data}"
+                  ){
+                      id
+                  }
+              }
+          `,
+        },
+      });
+    }
+    return res.status(201).json({'message': 'Mensaje procesado', 'Dispositivo': message.device});
+  }else{
+    return res.status(404).json({'message': 'Dispositivo no encontrado', 'Dispositivo': message.device});
   }
-
+  /* console.log('termino');
+  return res.json({'message': 'Mensaje procesado', 'Dispositivo': message.device}); */
 })
 
 /* app.use('/graphql',(req,res,next) => {
