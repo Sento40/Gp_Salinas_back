@@ -6,7 +6,7 @@ import Message from './models/Message'
 
 const messages = [];
 
-const Messages = Message
+const Messages = Message;
 
 const resolvers = {
   Query: {
@@ -37,7 +37,7 @@ const resolvers = {
     newMessageAdded: {
       subscribe: withFilter(
           () => pubsub.asyncIterator('newMessageAdded'),
-          (_params, _variables) => true
+          (params, variables) => true
       ),
     },
   }

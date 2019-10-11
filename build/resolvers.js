@@ -53,7 +53,7 @@ var resolvers = {
     newMessageAdded: {
       subscribe: withFilter(function () {
         return pubsub.asyncIterator('newMessageAdded');
-      }, function (_params, _variables) {
+      }, function (params, variables) {
         return true;
       })
     }

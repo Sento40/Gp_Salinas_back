@@ -46,6 +46,27 @@ app.post('/createMessage', (req, res) => {
   const fecha = Unix_timestamp_date(message.timestamp);
   console.log(hora, "hora");
   console.log(fecha, "date");
+
+  if(message.data === "45778A"){
+    return axios({
+      url: 'https://back-temperature-sento.herokuapp.com/graphql',
+      method: 'post',
+      data: {
+        query: `
+            mutation{
+                addMessage(
+                    sigfox:"${message.sigfox}",
+                    timestamp:"${fecha}",
+                    data:"${message.data}"
+                ){
+                    id
+                }
+            }
+        `,
+      },
+    });
+  }
+
 })
 
 /* app.use('/graphql',(req,res,next) => {
@@ -75,12 +96,12 @@ try {
 }
 }); */
 
-// ws://
+// ws://back-temperature-sento.herokuapp.com/graphql
 app.use(
   '/graphiql',
   graphiqlExpress({
     endpointURL: '/graphql',
-    subscriptionsEndpoint: 'ws://localhost:3030/subscriptions',
+    subscriptionsEndpoint: 'ws://back-temperature-sento.herokuapp.com/graphql',
   })
 );
 
@@ -97,7 +118,7 @@ server.listen(PORT, () => {
       },
       {
         server,
-        path: '/subscription',
+        path: '/graphql',
       }
   );
 });

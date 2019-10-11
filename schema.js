@@ -3,6 +3,7 @@ const {resolvers} = require('./resolvers');
 
 const typeDefs = `
   type Message {
+    id: ID!
     device: String!
     timestamp: String!
     data: String!
@@ -27,4 +28,4 @@ const typeDefs = `
   }
 `;
 
-module.exports = makeExecutableSchema({typeDefs, resolvers})
+module.exports = makeExecutableSchema({typeDefs, resolvers});
