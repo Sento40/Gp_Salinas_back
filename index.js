@@ -40,14 +40,14 @@ function Unix_timestamp_date(t) {
 
 app.post('/createMessage', (req, res) => {
   const message = req.body;
-  console.log(message);
-  if(message.sigfox){
+  console.log(message, "<-message");
+  if(message.device){
     const hora = Unix_timestamp(message.timestamp);
     const fecha = Unix_timestamp_date(message.timestamp);
     console.log(hora, "hora");
     console.log(fecha, "date");
   
-    if(message.data === "45778A"){
+    if(message.device === "45778A"){
       return axios({
         url: 'https://back-temperature-sento.herokuapp.com/graphql',
         method: 'post',
@@ -55,7 +55,7 @@ app.post('/createMessage', (req, res) => {
           query: `
               mutation{
                   addMessage(
-                      sigfox:"${message.sigfox}",
+                      sigfox:"${message.device}",
                       timestamp:"${fecha}",
                       data:"${message.data}"
                   ){
