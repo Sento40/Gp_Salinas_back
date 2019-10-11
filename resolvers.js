@@ -1,49 +1,56 @@
-const {PubSub, withFilter} = require('graphql-subscriptions');
+const { PubSub, withFilter } = require('graphql-subscriptions');
 const pubsub = new PubSub();
-const moongose = require('mongoose');
-import {Schema} from 'mongoose';
-import Message from './models/Message'
+const mongoose = require('mongoose');
+import { Schema } from 'mongoose';
 
 const messages = [];
 
-const Messages = Message;
+const Message = mongoose.model('Message', {
+  "device":{
+  type:String,
+  required:true
+},
+"timestamp":{
+  type:Number,
+  required:true
+},
+"data":{
+  type:String,
+  required:true
+} });
 
 const resolvers = {
   Query: {
-    getMessages(_parentValue, _params) {
-      const messages = Messages.find().exec()
-      return messages
+    getMessages(parentValue, params) {
+      const messages = Message.find().exec()
+      return messages;
     }
   },
   Mutation: {
-    addMessage(_parentValue, {device, timestamp, data}) {
-      messages.push({device, timestamp, data});
+    addMessage(parentValue, { device, timestamp, data }) {
+      messages.push({ device, timestamp, data });
 
-      const mess = new Messages({device:device, timestamp:timestamp, data:data});
-      mess.save().then((result) => {
-        console.log("Message created");
-      }).catch((err) => {
-        console.log("Error en addMessage", err);
-      });
+      const mess = new Message({ device: device, data: data, timestamp: timestamp })
+      mess.save().then(() => console.log("message creado"))
 
       pubsub.publish('newMessageAdded', {
-        newMessageAdded: {device, timestamp, data}
-      })
-
-      return messages
+        newMessageAdded: { device, timestamp, data }
+      });
+      
+      return messages;
     }
   },
   Subscription: {
     newMessageAdded: {
       subscribe: withFilter(
-          () => pubsub.asyncIterator('newMessageAdded'),
-          (params, variables) => true
-      ),
-    },
+        () => pubsub.asyncIterator('newMessageAdded'),
+        (params, variables) => true
+      )
+    }
   }
-}
+};
 
 module.exports = {
   resolvers,
-  Messages
+  Message
 }

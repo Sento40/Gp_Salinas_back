@@ -1,5 +1,10 @@
 'use strict';
 
+/* eslint-disable require-jsdoc */
+/* eslint-disable no-unused-vars */
+/* eslint-disable new-cap */
+/* eslint-disable camelcase */
+/* eslint-disable max-len */
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -20,13 +25,23 @@ var _require4 = require('http'),
     createServer = _require4.createServer;
 
 var _require5 = require('./resolvers'),
-    Message = _require5.Message;
+    Message = _require5.Message,
+    Device = _require5.Device,
+    Report = _require5.Report,
+    Records = _require5.Records,
+    Bus = _require5.Bus,
+    Panic = _require5.Panic,
+    Counts = _require5.Counts,
+    Bindings = _require5.Bindings;
 
 var timestampToDate = require('date-from-timestamp');
 var axios = require('axios');
 var nodemailer = require('nodemailer');
 var path = require('path');
 var bcrypt = require('bcryptjs');
+
+var SALT_WORK_FACTOR = 10;
+
 var schema = require('./schema');
 
 var app = express();
@@ -58,7 +73,8 @@ function Unix_timestamp_date(t) {
 
 app.post('/createMessage', function (req, res) {
   var message = req.body;
-  console.log(message, "<-message");
+  console.log(message);
+
   if (message.device) {
     var hora = Unix_timestamp(message.timestamp);
     var fecha = Unix_timestamp_date(message.timestamp);
@@ -78,8 +94,6 @@ app.post('/createMessage', function (req, res) {
   } else {
     return res.status(404).json({ 'message': 'Dispositivo no encontrado', 'Dispositivo': message.device });
   }
-  /* console.log('termino');
-  return res.json({'message': 'Mensaje procesado', 'Dispositivo': message.device}); */
 });
 
 /* app.use('/graphql',(req,res,next) => {
@@ -97,16 +111,16 @@ app.use('/graphql', graphqlExpress({
 }));
 
 /* app.use('/graphiql', (req, res, next) => {
-const token = req.headers['authorization'];
-try {
-  req.user = verifyToken(token);
-  next();
-} catch (error) {
-  res.status(401).json({message: error.message});
-}
+  const token = req.headers['authorization'];
+  try {
+    req.user = verifyToken(token);
+    next();
+  } catch (error) {
+    res.status(401).json({message: error.message});
+  }
 }); */
 
-// ws://back-temperature-sento.herokuapp.com/graphql
+// ws://movilidad-back.herokuapp.com/graphql
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
   subscriptionsEndpoint: 'ws://back-temperature-sento.herokuapp.com/graphql'

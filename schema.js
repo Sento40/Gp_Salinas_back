@@ -1,9 +1,9 @@
+/* eslint-disable max-len */
 const {makeExecutableSchema} = require('graphql-tools');
 const {resolvers} = require('./resolvers');
 
 const typeDefs = `
   type Message {
-    id: ID!
     device: String!
     timestamp: String!
     data: String!
