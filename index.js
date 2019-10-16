@@ -56,7 +56,6 @@ app.post('/createMessage', (req, res) => {
     console.log(hora, "hora");
     console.log(fecha, "date");
   
-    if(message.device === "45778A"){
       return axios({
         url: 'https://back-temperature-sento.herokuapp.com/graphql',
         method: 'post',
@@ -76,9 +75,6 @@ app.post('/createMessage', (req, res) => {
       });
     }
     return res.status(201).json({'message': 'Mensaje procesado', 'Dispositivo': message.device});
-  }else{
-    return res.status(404).json({'message': 'Dispositivo no encontrado', 'Dispositivo': message.device});
-  }
 });
 
 /* app.use('/graphql',(req,res,next) => {
