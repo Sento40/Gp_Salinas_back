@@ -2,6 +2,12 @@
 
 var _mongoose = require('mongoose');
 
+var _Message = require('./models/Message');
+
+var _Message2 = _interopRequireDefault(_Message);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var _require = require('graphql-subscriptions'),
     PubSub = _require.PubSub,
     withFilter = _require.withFilter;
@@ -12,25 +18,17 @@ var mongoose = require('mongoose');
 
 var messages = [];
 
-var Message = mongoose.model('Message', {
-  "device": {
-    type: String,
-    required: true
-  },
-  "timestamp": {
-    type: Number,
-    required: true
-  },
-  "data": {
-    type: String,
-    required: true
-  } });
+var Message = _Message2.default;
 
 var resolvers = {
   Query: {
     getMessages: function getMessages(parentValue, params) {
       var messages = Message.find().exec();
       return messages;
+    },
+    lastestMessages: function lastestMessages(parentValue, params) {
+      var lastMess = Message.find().sort({ timestamp: -1 }).limit(3).exec();
+      return lastMess;
     }
   },
   Mutation: {

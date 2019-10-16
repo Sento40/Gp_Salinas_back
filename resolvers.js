@@ -2,28 +2,21 @@ const { PubSub, withFilter } = require('graphql-subscriptions');
 const pubsub = new PubSub();
 const mongoose = require('mongoose');
 import { Schema } from 'mongoose';
+import Messages from './models/Message'
 
 const messages = [];
 
-const Message = mongoose.model('Message', {
-  "device":{
-  type:String,
-  required:true
-},
-"timestamp":{
-  type:Number,
-  required:true
-},
-"data":{
-  type:String,
-  required:true
-} });
+const Message = Messages
 
 const resolvers = {
   Query: {
     getMessages(parentValue, params) {
       const messages = Message.find().exec()
       return messages;
+    },
+    lastestMessages(parentValue, params) {
+      const lastMess = Message.find().sort({timestamp: -1}).limit(3).exec()
+      return lastMess
     }
   },
   Mutation: {
