@@ -27,7 +27,7 @@ var resolvers = {
       return messages;
     },
     lastestMessages: function lastestMessages(parentValue, params) {
-      var lastMess = Message.find().sort({ timestamp: -1 }).limit(3).exec();
+      var lastMess = Message.find({ sigfox: "459768" }).sort({ timestamp: -1 }).limit(3).exec();
       return lastMess;
     }
   },
@@ -37,6 +37,7 @@ var resolvers = {
           timestamp = _ref.timestamp,
           data = _ref.data;
 
+      console.log("in graph addMessage");
       messages.push({ device: device, timestamp: timestamp, data: data });
 
       var mess = new Message({ device: device, data: data, timestamp: timestamp });

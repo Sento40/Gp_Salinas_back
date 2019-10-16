@@ -15,12 +15,13 @@ const resolvers = {
       return messages;
     },
     lastestMessages(parentValue, params) {
-      const lastMess = Message.find().sort({timestamp: -1}).limit(3).exec()
+      const lastMess = Message.find({sigfox: "459768"}).sort({timestamp: -1}).limit(3).exec()
       return lastMess
     }
   },
   Mutation: {
     addMessage(parentValue, { device, timestamp, data }) {
+      console.log("in graph addMessage");
       messages.push({ device, timestamp, data });
 
       const mess = new Message({ device: device, data: data, timestamp: timestamp })

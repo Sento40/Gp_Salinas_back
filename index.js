@@ -56,25 +56,26 @@ app.post('/createMessage', (req, res) => {
     console.log(hora, "hora");
     console.log(fecha, "date");
   
-      return axios({
+      axios({
         url: 'https://back-temperature-sento.herokuapp.com/graphql',
         method: 'post',
         data: {
           query: `
               mutation{
                   addMessage(
-                      sigfox:"${message.device}",
+                      device:"${message.device}",
                       timestamp:"${fecha}",
                       data:"${message.data}"
                   ){
-                      id
+                      device
                   }
               }
           `,
         },
       });
+      return res.status(201).json({'message': 'Mensaje procesado', 'Dispositivo': message.device});
     }
-    return res.status(201).json({'message': 'Mensaje procesado', 'Dispositivo': message.device});
+    return res.status(200).json({'message': 'Mensaje procesado', 'Dispositivo': message.device});
 });
 
 /* app.use('/graphql',(req,res,next) => {
