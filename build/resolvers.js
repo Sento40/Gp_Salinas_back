@@ -27,7 +27,7 @@ var resolvers = {
       return messages;
     },
     lastestMessages: function lastestMessages(parentValue, params) {
-      var lastMess = Message.find({ device: "45776B" }).sort({ timestamp: -1 }).limit(3).exec();
+      var lastMess = Message.find({ device: params.dev }).sort({ timestamp: -1 }).limit(3).exec();
       return lastMess;
     }
   },
