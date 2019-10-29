@@ -17,6 +17,10 @@ const resolvers = {
     lastestMessages(parentValue, params) {
       const lastMess = Message.find({device: params.dev}).sort({timestamp: -1}).limit(3).exec()
       return lastMess
+    },
+    deviceMessages(parentValue, params) {
+      const devMess = Message.find({device: params.device}).exec()
+      return devMess
     }
   },
   Mutation: {

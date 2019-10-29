@@ -29,6 +29,10 @@ var resolvers = {
     lastestMessages: function lastestMessages(parentValue, params) {
       var lastMess = Message.find({ device: params.dev }).sort({ timestamp: -1 }).limit(3).exec();
       return lastMess;
+    },
+    deviceMessages: function deviceMessages(parentValue, params) {
+      var devMess = Message.find({ device: params.device }).exec();
+      return devMess;
     }
   },
   Mutation: {

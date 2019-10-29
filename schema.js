@@ -12,6 +12,7 @@ const typeDefs = `
   type Query {
     getMessages: [Message]
     lastestMessages(dev: String): [Message]
+    deviceMessages(device: String): [Message]
   }
 
   type Mutation {
