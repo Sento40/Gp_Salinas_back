@@ -110,7 +110,7 @@ app.use(
     '/graphiql',
     graphiqlExpress({
       endpointURL: '/graphql',
-      subscriptionsEndpoint: 'ws://back-temperature-sento.herokuapp.com/graphql',
+      subscriptionsEndpoint: 'wss://back-temperature-sento.herokuapp.com/graphql',
     })
 );
 
